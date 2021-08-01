@@ -19,7 +19,7 @@ public:
     : timer_(io, boost::asio::chrono::seconds(1)),
       count_(0)
   {
-    timer_.async_wait(boost::bind(&printer::print, this));
+    timer_.async_wait(boost::bind(&printer::print, this/*, boost::asio::placeholders::error*/));
   }
 
   ~printer()
@@ -27,15 +27,17 @@ public:
     std::cout << "Final count is " << count_ << std::endl;
   }
 
-  void print()
+  void print(/*const boost::system::error_code& e*/)
   {
+    // std::cout << e.value() << ' ' << e.message() << std::endl;
+
     if (count_ < 5)
     {
       std::cout << count_ << std::endl;
       ++count_;
 
       timer_.expires_at(timer_.expiry() + boost::asio::chrono::seconds(1));
-      timer_.async_wait(boost::bind(&printer::print, this));
+      timer_.async_wait(boost::bind(&printer::print, this/*, boost::asio::placeholders::error*/));
     }
   }
 

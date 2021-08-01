@@ -16,7 +16,8 @@ int main()
   boost::asio::io_context io;
 
   boost::asio::steady_timer t(io, boost::asio::chrono::seconds(5));
-  t.wait();
+  // the call to steady_timer::wait() will not return until the timer has expired, 5 seconds after it was created (i.e. not from when the wait starts).
+  t.wait(); 
 
   std::cout << "Hello, world!" << std::endl;
 

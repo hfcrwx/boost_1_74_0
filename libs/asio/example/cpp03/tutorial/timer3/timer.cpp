@@ -12,6 +12,7 @@
 #include <boost/asio.hpp>
 #include <boost/bind/bind.hpp>
 
+// stop the program when the timer fires for the sixth time.
 void print(const boost::system::error_code& /*e*/,
     boost::asio::steady_timer* t, int* count)
 {
