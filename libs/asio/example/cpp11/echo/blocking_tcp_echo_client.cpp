@@ -45,6 +45,11 @@ int main(int argc, char* argv[])
     std::cout << "Reply is: ";
     std::cout.write(reply, reply_length);
     std::cout << "\n";
+
+    // size_t reply_length = s.read_some(boost::asio::buffer(reply, max_length));
+    // std::cout << "Reply is: ";
+    // std::cout.write(reply, reply_length);
+    // std::cout << "\n";
   }
   catch (std::exception& e)
   {

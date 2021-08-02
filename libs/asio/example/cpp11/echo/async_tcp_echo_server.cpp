@@ -35,7 +35,7 @@ private:
   {
     auto self(shared_from_this());
     socket_.async_read_some(boost::asio::buffer(data_, max_length),
-        [this, self](boost::system::error_code ec, std::size_t length)
+        [this, self](boost::system::error_code ec, std::size_t length) // 绑定self，延长session生命周期
         {
           if (!ec)
           {
