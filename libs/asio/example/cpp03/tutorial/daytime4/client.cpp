@@ -27,8 +27,11 @@ int main(int argc, char* argv[])
     boost::asio::io_context io_context;
 
     udp::resolver resolver(io_context);
+    // The ip::udp::resolver::resolve() function is guaranteed to return at least one endpoint in the list if it does not fail.
+    // This means it is safe to dereference the return value directly.
     udp::endpoint receiver_endpoint =
       *resolver.resolve(udp::v4(), argv[1], "daytime").begin();
+    std::cout << receiver_endpoint << std::endl;
 
     udp::socket socket(io_context);
     socket.open(udp::v4());
@@ -40,6 +43,7 @@ int main(int argc, char* argv[])
     udp::endpoint sender_endpoint;
     size_t len = socket.receive_from(
         boost::asio::buffer(recv_buf), sender_endpoint);
+    std::cout << sender_endpoint << std::endl;
 
     std::cout.write(recv_buf.data(), len);
   }

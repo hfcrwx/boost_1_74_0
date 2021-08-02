@@ -36,6 +36,7 @@ int main()
       boost::array<char, 1> recv_buf;
       udp::endpoint remote_endpoint;
       socket.receive_from(boost::asio::buffer(recv_buf), remote_endpoint);
+      std::cout << remote_endpoint << std::endl;
 
       std::string message = make_daytime_string();
 

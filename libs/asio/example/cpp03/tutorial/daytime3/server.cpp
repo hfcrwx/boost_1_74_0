@@ -25,8 +25,9 @@ std::string make_daytime_string()
   return ctime(&now);
 }
 
+// We will use shared_ptr and enable_shared_from_this because we want to keep the tcp_connection object alive as long as there is an operation that refers to it.
 class tcp_connection
-  : public boost::enable_shared_from_this<tcp_connection>
+    : public boost::enable_shared_from_this<tcp_connection>
 {
 public:
   typedef boost::shared_ptr<tcp_connection> pointer;
@@ -45,6 +46,7 @@ public:
   {
     message_ = make_daytime_string();
 
+    // Note that we are using boost::asio::async_write(), rather than ip::tcp::socket::async_write_some(), to ensure that the entire block of data is sent.
     boost::asio::async_write(socket_, boost::asio::buffer(message_),
         boost::bind(&tcp_connection::handle_write, shared_from_this(),
           boost::asio::placeholders::error,
@@ -53,7 +55,7 @@ public:
 
 private:
   tcp_connection(boost::asio::io_context& io_context)
-    : socket_(io_context)
+      : socket_(io_context)
   {
   }
 
@@ -63,15 +65,15 @@ private:
   }
 
   tcp::socket socket_;
-  std::string message_;
+  std::string message_; // The data to be sent is stored in the class member message_ as we need to keep the data valid until the asynchronous operation is complete. 
 };
 
 class tcp_server
 {
 public:
   tcp_server(boost::asio::io_context& io_context)
-    : io_context_(io_context),
-      acceptor_(io_context, tcp::endpoint(tcp::v4(), 13))
+      : io_context_(io_context),
+        acceptor_(io_context, tcp::endpoint(tcp::v4(), 13))
   {
     start_accept();
   }
@@ -80,7 +82,7 @@ private:
   void start_accept()
   {
     tcp_connection::pointer new_connection =
-      tcp_connection::create(io_context_);
+        tcp_connection::create(io_context_);
 
     acceptor_.async_accept(new_connection->socket(),
         boost::bind(&tcp_server::handle_accept, this, new_connection,
@@ -88,7 +90,7 @@ private:
   }
 
   void handle_accept(tcp_connection::pointer new_connection,
-      const boost::system::error_code& error)
+                     const boost::system::error_code& error)
   {
     if (!error)
     {

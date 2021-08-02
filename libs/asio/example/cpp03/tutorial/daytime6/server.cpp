@@ -45,8 +45,10 @@ private:
   }
 
   void handle_receive(const boost::system::error_code& error,
-      std::size_t /*bytes_transferred*/)
+      std::size_t bytes_transferred)
   {
+    std::cout << error << ' ' << bytes_transferred << std::endl; // 0 1
+    // 最多接受1个字节，client发送的多于一个字节的部分会被丢弃，error=0
     if (!error)
     {
       boost::shared_ptr<std::string> message(

@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
       resolver.resolve(argv[1], "daytime");
 
     tcp::socket socket(io_context);
-    boost::asio::connect(socket, endpoints);
+    boost::asio::connect(socket, endpoints); // The list of endpoints obtained above may contain both IPv4 and IPv6 endpoints
 
     for (;;)
     {
