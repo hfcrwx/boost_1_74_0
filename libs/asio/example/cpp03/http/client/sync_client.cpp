@@ -60,11 +60,11 @@ int main(int argc, char* argv[])
     // Check that response is OK.
     std::istream response_stream(&response);
     std::string http_version;
-    response_stream >> http_version;
+    response_stream >> http_version; // "HTTP/1.0"
     unsigned int status_code;
-    response_stream >> status_code;
+    response_stream >> status_code; // 200
     std::string status_message;
-    std::getline(response_stream, status_message);
+    std::getline(response_stream, status_message); // " OK\r"
     if (!response_stream || http_version.substr(0, 5) != "HTTP/")
     {
       std::cout << "Invalid response\n";
