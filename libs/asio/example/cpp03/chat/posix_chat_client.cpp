@@ -113,7 +113,7 @@ private:
     if (!error)
     {
       // Write the message (minus the newline) to the server.
-      write_msg_.body_length(length - 1);
+      write_msg_.body_length(length - 1); // '\n'
       input_buffer_.sgetn(write_msg_.body(), length - 1);
       input_buffer_.consume(1); // Remove newline from input.
       write_msg_.encode_header();

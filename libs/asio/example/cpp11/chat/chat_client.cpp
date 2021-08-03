@@ -30,21 +30,22 @@ public:
     do_connect(endpoints);
   }
 
-  void write(const chat_message& msg)
+  void write(const chat_message& msg) // 跨线程调用
   {
+    // queueInLoop
     boost::asio::post(io_context_,
         [this, msg]()
         {
           bool write_in_progress = !write_msgs_.empty();
           write_msgs_.push_back(msg);
-          if (!write_in_progress)
+          if (!write_in_progress) // write_msgs_.size()=1
           {
             do_write();
           }
         });
   }
 
-  void close()
+  void close() // 跨线程调用
   {
     boost::asio::post(io_context_, [this]() { socket_.close(); });
   }

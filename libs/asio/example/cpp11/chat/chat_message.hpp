@@ -66,7 +66,8 @@ public:
   bool decode_header()
   {
     char header[header_length + 1] = "";
-    std::strncat(header, data_, header_length);
+    std::strncat(header, data_, header_length); //strncat确保header以0结尾
+    // std::memcpy(header, data_, header_length); //也可以
     body_length_ = std::atoi(header);
     if (body_length_ > max_body_length)
     {
