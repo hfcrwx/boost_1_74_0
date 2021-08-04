@@ -19,7 +19,7 @@ namespace server3 {
 connection::connection(boost::asio::io_context& io_context,
     request_handler& handler)
   : strand_(boost::asio::make_strand(io_context)),
-    socket_(strand_),
+    socket_(strand_), // 关键
     request_handler_(handler)
 {
 }

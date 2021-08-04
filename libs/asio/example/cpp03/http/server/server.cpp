@@ -46,7 +46,7 @@ server::server(const std::string& address, const std::string& port,
   start_accept();
 }
 
-void server::run()
+void server::run() // run之前io_context已经注册listenfd，不必须有work
 {
   // The io_context::run() call will block until all asynchronous operations
   // have finished. While the server is running, there is always at least one

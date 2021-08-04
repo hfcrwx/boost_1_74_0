@@ -34,7 +34,7 @@ io_context_pool::io_context_pool(std::size_t pool_size)
   }
 }
 
-void io_context_pool::run()
+void io_context_pool::run() // run之前io_contexts必须有work
 {
   // Create a pool of threads to run all of the io_contexts.
   std::vector<boost::shared_ptr<boost::thread> > threads;
