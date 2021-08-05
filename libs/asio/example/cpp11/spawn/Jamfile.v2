@@ -29,3 +29,22 @@ exe server
     <target-os>hpux:<library>ipv6
     <target-os>haiku:<library>network
   ;
+
+exe parallel_grep
+  : parallel_grep.cpp
+    /boost/context//boost_context
+    /boost/coroutine//boost_coroutine
+    /boost/system//boost_system
+  : <define>BOOST_ALL_NO_LIB=1
+    <threading>multi
+    <target-os>solaris:<library>socket
+    <target-os>solaris:<library>nsl
+    <target-os>windows:<define>_WIN32_WINNT=0x0501
+    <target-os>windows,<toolset>gcc:<library>ws2_32
+    <target-os>windows,<toolset>gcc:<library>mswsock
+    <target-os>windows,<toolset>gcc-cygwin:<define>__USE_W32_SOCKETS
+    <target-os>hpux,<toolset>gcc:<define>_XOPEN_SOURCE_EXTENDED
+    <target-os>hpux:<library>ipv6
+    <target-os>haiku:<library>network
+  ;
+  
