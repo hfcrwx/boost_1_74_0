@@ -113,8 +113,6 @@ int main(int argc, char* argv[])
 {
   try
   {
-    using namespace std; // For atoi.
-
     if (argc != 3)
     {
       std::cerr << "Usage: blocking_udp_client <listen_addr> <listen_port>\n";
