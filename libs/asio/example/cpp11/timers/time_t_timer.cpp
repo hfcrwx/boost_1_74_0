@@ -52,7 +52,7 @@ struct time_t_wait_traits
   // Determine how long until the clock should be next polled to determine
   // whether the duration has elapsed.
   static time_t_clock::duration to_wait_duration(
-      const time_t_clock::duration& d)
+      const time_t_clock::duration& d) // 下一次poll的时间间隔
   {
     if (d > std::chrono::seconds(1))
       return d - std::chrono::seconds(1);
@@ -65,7 +65,7 @@ struct time_t_wait_traits
   // Determine how long until the clock should be next polled to determine
   // whether the absoluate time has been reached.
   static time_t_clock::duration to_wait_duration(
-      const time_t_clock::time_point& t)
+      const time_t_clock::time_point& t) // 下一次poll的时间间隔
   {
     return to_wait_duration(t - time_t_clock::now());
   }
