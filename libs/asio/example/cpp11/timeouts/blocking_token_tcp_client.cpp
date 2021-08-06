@@ -61,14 +61,14 @@ public:
   class completion_handler_type
   {
   public:
-    completion_handler_type(const close_after& token)
+    completion_handler_type(const close_after& token) // s1
       : token_(token)
     {
     }
 
-    void operator()(const boost::system::error_code& error, T t)
+    void operator()(const boost::system::error_code& error, T t) // s4
     {
-      *error_ = error;
+      *error_ = error; // 赋值
       *t_ = t;
     }
 
@@ -81,11 +81,11 @@ public:
 
   // The async_result constructor associates the completion handler object with
   // the result of the initiating function.
-  explicit async_result(completion_handler_type& h)
+  explicit async_result(completion_handler_type& h) // s2
     : timeout_(h.token_.timeout_),
       socket_(h.token_.socket_)
   {
-    h.error_ = &error_;
+    h.error_ = &error_; // 传指针
     h.t_ = &t_;
   }
 
@@ -96,7 +96,7 @@ public:
   // The get() function is used to obtain the result of the asynchronous
   // operation's initiating function. For the close_after completion token, we
   // use this function to run the io_context until the operation is complete.
-  return_type get()
+  return_type get() // s3 异步函数返回的时候被调用，阻塞
   {
     boost::asio::io_context& io_context = boost::asio::query(
         socket_.get_executor(), boost::asio::execution::context);
@@ -125,7 +125,7 @@ public:
     }
 
     // If the operation failed, throw an exception. Otherwise return the result.
-    return error_ ? throw std::system_error(error_) : t_;
+    return error_ ? throw std::system_error(error_) : t_; // s5
   }
 
 private:
@@ -146,7 +146,7 @@ int main(int argc, char* argv[])
   {
     if (argc != 4)
     {
-      std::cerr << "Usage: blocking_tcp_client <host> <port> <message>\n";
+      std::cerr << "Usage: blocking_token_tcp_client <host> <port> <message>\n";
       return 1;
     }
 

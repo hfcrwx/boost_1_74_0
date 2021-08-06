@@ -280,7 +280,7 @@ private:
   tcp::resolver::results_type endpoints_;
   tcp::socket socket_;
   std::string input_buffer_;
-  steady_timer deadline_;
+  steady_timer deadline_; // connect, read 定时器过期后都采取相同的操作：close
   steady_timer heartbeat_timer_;
 };
 
@@ -290,7 +290,7 @@ int main(int argc, char* argv[])
   {
     if (argc != 3)
     {
-      std::cerr << "Usage: client <host> <port>\n";
+      std::cerr << "Usage: async_tcp_client <host> <port>\n";
       return 1;
     }
 

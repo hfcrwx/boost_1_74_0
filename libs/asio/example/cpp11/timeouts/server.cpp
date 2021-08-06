@@ -190,7 +190,7 @@ private:
 
     // Signal that the output queue contains messages. Modifying the expiry
     // will wake the output actor, if it is waiting on the timer.
-    non_empty_output_queue_.expires_at(steady_timer::time_point::min());
+    non_empty_output_queue_.expires_at(steady_timer::time_point::min()); // notify
   }
 
   void read_line()
@@ -216,15 +216,14 @@ private:
 
             if (!msg.empty())
             {
-              channel_.deliver(msg);
+              channel_.deliver(msg); // output_queue_.push_back(msg + "\n");
             }
-            else
+            else // 处理心跳
             {
-
               // We received a heartbeat message from the client. If there's
               // nothing else being sent or ready to be sent, send a heartbeat
               // right back.
-              if (output_queue_.empty())
+              if (output_queue_.empty()) // 已有消息，就不重复发心跳了
               {
                 output_queue_.push_back("\n");
 
@@ -232,7 +231,7 @@ private:
                 // the expiry will wake the output actor, if it is waiting on
                 // the timer.
                 non_empty_output_queue_.expires_at(
-                    steady_timer::time_point::min());
+                    steady_timer::time_point::min()); // notify
               }
             }
 
@@ -261,7 +260,7 @@ private:
             // to sleep by waiting on the non_empty_output_queue_ timer. When a
             // new message is added, the timer will be modified and the actor
             // will wake.
-            non_empty_output_queue_.expires_at(steady_timer::time_point::max());
+            non_empty_output_queue_.expires_at(steady_timer::time_point::max()); // wait
             await_output();
           }
           else
@@ -318,7 +317,7 @@ private:
             // terminate as soon as possible.
             stop();
           }
-          else
+          else // 可能超时时间已被修改为steady_timer::time_point::max()
           {
             // Put the actor back to sleep.
             check_deadline(deadline);
@@ -330,7 +329,7 @@ private:
   tcp::socket socket_;
   std::string input_buffer_;
   steady_timer input_deadline_{socket_.get_executor()};
-  std::deque<std::string> output_queue_;
+  std::deque<std::string> output_queue_; // mailbox
   steady_timer non_empty_output_queue_{socket_.get_executor()};
   steady_timer output_deadline_{socket_.get_executor()};
 };
@@ -405,8 +404,6 @@ int main(int argc, char* argv[])
 {
   try
   {
-    using namespace std; // For atoi.
-
     if (argc != 4)
     {
       std::cerr << "Usage: server <listen_port> <bcast_address> <bcast_port>\n";
@@ -415,10 +412,10 @@ int main(int argc, char* argv[])
 
     boost::asio::io_context io_context;
 
-    tcp::endpoint listen_endpoint(tcp::v4(), atoi(argv[1]));
+    tcp::endpoint listen_endpoint(tcp::v4(), std::atoi(argv[1]));
 
     udp::endpoint broadcast_endpoint(
-        boost::asio::ip::make_address(argv[2]), atoi(argv[3]));
+        boost::asio::ip::make_address(argv[2]), std::atoi(argv[3]));
 
     server s(io_context, listen_endpoint, broadcast_endpoint);
 

@@ -132,13 +132,13 @@ private:
     // If the asynchronous operation completed successfully then the io_context
     // would have been stopped due to running out of work. If it was not
     // stopped, then the io_context::run_for call must have timed out.
-    if (!io_context_.stopped())
+    if (!io_context_.stopped()) // timeout, 仍然有work，没有stop
     {
       // Close the socket to cancel the outstanding asynchronous operation.
       socket_.close();
 
       // Run the io_context again until the operation completes.
-      io_context_.run();
+      io_context_.run(); // for socket_.close();
     }
   }
 
@@ -171,7 +171,7 @@ int main(int argc, char* argv[])
       std::string line = c.read_line(std::chrono::seconds(10));
 
       // Keep going until we get back the line that was sent.
-      if (line == argv[3])
+      if (line == argv[3]) // 可能收到的是别的client发送的line，要判断
         break;
     }
 
