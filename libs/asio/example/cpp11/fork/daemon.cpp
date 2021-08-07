@@ -37,9 +37,8 @@ private:
         {
           if (!ec)
           {
-            using namespace std; // For time_t, time and ctime;
-            time_t now = time(0);
-            std::string message = ctime(&now);
+            time_t now = std::time(0);
+            std::string message = std::ctime(&now);
 
             boost::system::error_code ignored_ec;
             socket_.send_to(boost::asio::buffer(message),

@@ -42,7 +42,7 @@ private:
           // Only the parent process should check for this signal. We can
           // determine whether we are in the parent by checking if the acceptor
           // is still open.
-          if (acceptor_.is_open())
+          if (acceptor_.is_open()) // 父进程
           {
             // Reap completed child processes so that we don't end up with
             // zombies.
@@ -149,9 +149,7 @@ int main(int argc, char* argv[])
     }
 
     boost::asio::io_context io_context;
-
-    using namespace std; // For atoi.
-    server s(io_context, atoi(argv[1]));
+    server s(io_context, std::atoi(argv[1]));
 
     io_context.run();
   }
