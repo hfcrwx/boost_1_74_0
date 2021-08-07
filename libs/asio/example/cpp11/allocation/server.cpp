@@ -33,7 +33,7 @@ public:
   handler_memory(const handler_memory&) = delete;
   handler_memory& operator=(const handler_memory&) = delete;
 
-  void* allocate(std::size_t size)
+  void* allocate(std::size_t size) // s6
   {
     if (!in_use_ && size < sizeof(storage_))
     {
@@ -74,7 +74,7 @@ class handler_allocator
 public:
   using value_type = T;
 
-  explicit handler_allocator(handler_memory& mem)
+  explicit handler_allocator(handler_memory& mem) // s4
     : memory_(mem)
   {
   }
@@ -95,7 +95,7 @@ public:
     return &memory_ != &other.memory_;
   }
 
-  T* allocate(std::size_t n) const
+  T* allocate(std::size_t n) const // s5
   {
     return static_cast<T*>(memory_.allocate(sizeof(T) * n));
   }
@@ -122,13 +122,13 @@ class custom_alloc_handler
 public:
   using allocator_type = handler_allocator<Handler>;
 
-  custom_alloc_handler(handler_memory& m, Handler h)
+  custom_alloc_handler(handler_memory& m, Handler h) // s2
     : memory_(m),
       handler_(h)
   {
   }
 
-  allocator_type get_allocator() const noexcept
+  allocator_type get_allocator() const noexcept // s3
   {
     return allocator_type(memory_);
   }
@@ -147,7 +147,7 @@ private:
 // Helper function to wrap a handler object to add custom allocation.
 template <typename Handler>
 inline custom_alloc_handler<Handler> make_custom_alloc_handler(
-    handler_memory& m, Handler h)
+    handler_memory& m, Handler h) // s1
 {
   return custom_alloc_handler<Handler>(m, h);
 }

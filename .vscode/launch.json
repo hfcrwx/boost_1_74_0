@@ -449,6 +449,27 @@
                     "ignoreFailures": true
                 }
             ]
+        },
+        {
+            "name": "allocation-server (gdb) Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin.v2/libs/asio/example/cpp11/allocation/gcc-10/debug/threading-multi/visibility-hidden/server",
+            "args": [
+                "9981"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
         }
     ]
 }
