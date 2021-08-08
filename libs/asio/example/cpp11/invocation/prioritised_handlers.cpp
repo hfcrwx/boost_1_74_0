@@ -19,7 +19,7 @@ class handler_priority_queue : public boost::asio::execution_context
 {
 public:
   template <typename Function>
-  void add(int priority, Function function)
+  void add(int priority, Function function) // s4
   {
     std::unique_ptr<queued_handler_base> handler(
         new queued_handler<Function>(
@@ -28,7 +28,7 @@ public:
     handlers_.push(std::move(handler));
   }
 
-  void execute_all()
+  void execute_all() // s6
   {
     while (!handlers_.empty())
     {
@@ -41,7 +41,7 @@ public:
   {
   public:
     executor(handler_priority_queue& q, int p)
-      : context_(q), priority_(p)
+      : context_(q), priority_(p) // s2
     {
     }
 
@@ -51,7 +51,7 @@ public:
     }
 
     template <typename Function, typename Allocator>
-    void dispatch(Function f, const Allocator&) const
+    void dispatch(Function f, const Allocator&) const // s3
     {
       context_.add(priority_, std::move(f));
     }
@@ -88,7 +88,7 @@ public:
 
   template <typename Handler>
   boost::asio::executor_binder<Handler, executor>
-  wrap(int priority, Handler handler)
+  wrap(int priority, Handler handler) // s1
   {
     return boost::asio::bind_executor(
         executor(*this, priority), std::move(handler));
@@ -124,11 +124,11 @@ private:
   {
   public:
     queued_handler(int p, Function f)
-      : queued_handler_base(p), function_(std::move(f))
+      : queued_handler_base(p), function_(std::move(f)) //s5
     {
     }
 
-    void execute() override
+    void execute() override // s7
     {
       function_();
     }
