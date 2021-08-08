@@ -11,9 +11,9 @@
 #include <array>
 #include <iostream>
 #include <string>
+#include <thread>
 #include <cctype>
 #include <boost/asio.hpp>
-#include <boost/thread/thread.hpp>
 
 #if defined(BOOST_ASIO_HAS_LOCAL_SOCKETS)
 
@@ -84,7 +84,7 @@ int main()
     uppercase_filter filter(std::move(filter_socket));
 
     // The io_context runs in a background thread to perform filtering.
-    boost::thread thread(
+    std::thread thread(
         [&io_context]()
         {
           try
