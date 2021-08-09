@@ -53,7 +53,7 @@ private:
     X509_NAME_oneline(X509_get_subject_name(cert), subject_name, 256);
     std::cout << "Verifying " << subject_name << "\n";
 
-    return preverified;
+    return preverified; //true
   }
 
   void connect(const tcp::resolver::results_type& endpoints)

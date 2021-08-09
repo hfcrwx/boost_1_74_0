@@ -12,7 +12,7 @@ lib mswsock ; # NT
 lib ipv6 ; # HPUX
 lib network ; # HAIKU
 
-exe server
+exe sync_client
   : sync_client.cpp
     /boost/system//boost_system
     /boost/chrono//boost_chrono
