@@ -42,7 +42,7 @@ public:
     if (std::size_t len = socket_.read_some(boost::asio::buffer(data_), ec))
     {
       write_buffer_ = boost::asio::buffer(data_, len);
-      state_ = writing;
+      state_ = writing; // 读完数据，需要关注写事件
     }
   }
 
@@ -60,7 +60,7 @@ public:
           boost::asio::buffer(write_buffer_), ec))
     {
       write_buffer_ = write_buffer_ + len;
-      state_ = boost::asio::buffer_size(write_buffer_) > 0 ? writing : reading;
+      state_ = boost::asio::buffer_size(write_buffer_) > 0 ? writing : reading; // 如果没写完数据，需要继续关注写事件，否则需要关注读事件
     }
   }
 
@@ -97,7 +97,7 @@ private:
     auto self(shared_from_this());
 
     // Start a read operation if the third party library wants one.
-    if (session_impl_.want_read() && !read_in_progress_)
+    if (session_impl_.want_read() && !read_in_progress_) // 3rd lib 需要关注读事件，且reactor当前没有关注读事件
     {
       read_in_progress_ = true;
       socket_.async_wait(tcp::socket::wait_read,
@@ -125,7 +125,7 @@ private:
     }
 
     // Start a write operation if the third party library wants one.
-    if (session_impl_.want_write() && !write_in_progress_)
+    if (session_impl_.want_write() && !write_in_progress_) // 3rd lib 需要关注写事件，且reactor当前没有关注写事件
     {
       write_in_progress_ = true;
       socket_.async_wait(tcp::socket::wait_write,
