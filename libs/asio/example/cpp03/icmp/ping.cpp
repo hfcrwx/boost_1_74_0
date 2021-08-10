@@ -53,7 +53,7 @@ private:
     os << echo_request << body;
 
     // Send the request.
-    time_sent_ = steady_timer::clock_type::now();
+    time_sent_ = steady_timer::clock_type::now(); //更新到当前时间
     socket_.send_to(request_buffer.data(), destination_);
 
     // Wait up to five seconds for a reply.
@@ -64,11 +64,11 @@ private:
 
   void handle_timeout()
   {
-    if (num_replies_ == 0)
+    if (num_replies_ == 0) // 5s定时器，一直没有回复
       std::cout << "Request timed out" << std::endl;
 
     // Requests must be sent no less than one second apart.
-    timer_.expires_at(time_sent_ + chrono::seconds(1));
+    timer_.expires_at(time_sent_ + chrono::seconds(1)); // 每隔1s发送一次
     timer_.async_wait(boost::bind(&pinger::start_send, this));
   }
 
@@ -103,7 +103,7 @@ private:
     {
       // If this is the first reply, interrupt the five second timeout.
       if (num_replies_++ == 0)
-        timer_.cancel();
+        timer_.cancel(); // 取消5s定时器，handle_timeout触发
 
       // Print out some information about the reply packet.
       chrono::steady_clock::time_point now = chrono::steady_clock::now();

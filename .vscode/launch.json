@@ -782,6 +782,27 @@
                     "ignoreFailures": true
                 }
             ]
+        },
+        {
+            "name": "ping (gdb) Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin.v2/libs/asio/example/cpp03/icmp/gcc-10/debug/threading-multi/visibility-hidden/ping",
+            "args": [
+                "127.0.0.1"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
         }
     ]
 }
