@@ -24,10 +24,10 @@ class basic_logger
   : private boost::noncopyable
 {
 public:
-  /// The type of the service that will be used to provide timer operations.
+  /// The type of the service that will be used to provide logger operations.
   typedef Service service_type;
 
-  /// The native implementation type of the timer.
+  /// The native implementation type of the logger.
   typedef typename service_type::impl_type impl_type;
 
   /// Constructor.
