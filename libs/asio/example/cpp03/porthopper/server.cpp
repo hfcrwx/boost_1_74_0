@@ -67,7 +67,7 @@ public:
 
   // Handle a new control request.
   void handle_control_request(const boost::system::error_code& ec,
-      tcp_socket_ptr socket, control_request_ptr request)
+      tcp_socket_ptr socket, control_request_ptr request) // 延迟2s处理
   {
     if (!ec)
     {

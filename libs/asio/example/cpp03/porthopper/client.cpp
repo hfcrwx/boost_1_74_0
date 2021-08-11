@@ -33,7 +33,6 @@ int main(int argc, char* argv[])
       std::cerr << "Usage: client <host> <port>\n";
       return 1;
     }
-    using namespace std; // For atoi.
     std::string host_name = argv[1];
     std::string port = argv[2];
 
@@ -146,7 +145,7 @@ int main(int argc, char* argv[])
 
         // Run the operations in parallel. This will block until all operations
         // have finished, or until the io_context is interrupted. (No threads!)
-        io_context.restart();
+        io_context.restart(); // 可能已经stop：lambda::bind(&boost::asio::io_context::stop, &io_context),
         io_context.run();
 
         // If the io_context.run() was interrupted then we have received a frame
