@@ -11,7 +11,7 @@ namespace execution = boost::asio::execution;
 class bank_account
 {
   int balance_ = 0;
-  mutable static_thread_pool pool_{1};
+  mutable static_thread_pool pool_{1}; // 单线程，不用加锁
 
 public:
   void deposit(int amount)

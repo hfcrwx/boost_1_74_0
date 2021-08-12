@@ -272,14 +272,17 @@ int main()
     members[i] = std::make_shared<member>(pools[(i / actors_per_thread) % num_threads].get_executor());
 
   // Initialise the actors by passing each one the address of the next actor in the ring.
+  // rcvr向每个member发送下一个member的地址地址: 0->502, 502->501, 501->500, ..., 1->0 
   for (std::size_t i = num_actors, next_i = 0; i > 0; next_i = --i)
     send(members[next_i]->address(), rcvr.address(), members[i - 1]->address());
 
   // Send exactly one token to each actor, all with the same initial value, rounding up if required.
+  // rcvr向每个member发送初始的token, 每个member收到后，将token-1发给下个member，直到一个member收到的token为0，它将0发给rcvr
   for (std::size_t i = 0; i < num_actors; ++i)
     send(token_value, rcvr.address(), members[i]->address());
 
   // Wait for all signal messages, indicating the tokens have all reached zero.
+  // rcvr.wait()阻塞，直到
   for (std::size_t i = 0; i < num_actors; ++i)
     rcvr.wait();
 }
