@@ -12,7 +12,7 @@ lib mswsock ; # NT
 lib ipv6 ; # HPUX
 lib network ; # HAIKU
 
-exe server
+exe daytime_client
   : daytime_client.cpp
     /boost/system//boost_system
   : <define>BOOST_ALL_NO_LIB=1

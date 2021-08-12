@@ -92,7 +92,7 @@ void test_future()
 
   io_context.run();
 
-  try
+  try // 必要
   {
     // Get the result of the operation.
     std::size_t n = f.get();
